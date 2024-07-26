@@ -10,7 +10,7 @@
 #
 
 class loggly::params {
-  case $operatingsystem {
+  case $facts['os']['name'] {
     'RedHat', 'Ubuntu', 'Fedora', 'CentOS', 'Debian': {
       # base directory for loggly support files
       $base_dir = '/usr/local/loggly'
@@ -20,7 +20,7 @@ class loggly::params {
     }
 
     default: {
-      fail("$operatingsystem not supported")
+      fail("$facts['os']['name'] not supported")
     }
   }
 }
