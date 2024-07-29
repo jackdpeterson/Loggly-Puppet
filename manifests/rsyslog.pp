@@ -37,7 +37,7 @@
 class rsyslog_to_vendor::rsyslog (
   String $loggly_customer_token    = $rsyslog_to_vendor::loggly_customer_token,
   String $new_relic_customer_token = $rsyslog_to_vendor::new_relic_customer_token,
-  Resource $cert_path              = $rsyslog_to_vendor::_cert_path,
+  $cert_path              = $rsyslog_to_vendor::_cert_path,
   Boolean $enable_tls              = $rsyslog_to_vendor::enable_tls,
 ) inherits rsyslog_to_vendor {
   validate_string($loggly_customer_token)

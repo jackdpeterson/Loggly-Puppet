@@ -25,11 +25,11 @@
 # Jack Peterson <>
 #
 class rsyslog_to_vendor (
-  Resource $base_dir               = $rsyslog_to_vendor::params::base_dir,
+  $base_dir                        = $rsyslog_to_vendor::params::base_dir,
   Boolean $enable_tls              = $rsyslog_to_vendor::params::enable_tls,
   String $loggly_customer_token    = undef,
   String $new_relic_customer_token = undef,
-  Resource $cert_path              = undef,
+  $cert_path                       = undef,
 ) inherits rsyslog_to_vendor::params {
   $_cert_path = pick($cert_path, "${base_dir}/certs")
 
