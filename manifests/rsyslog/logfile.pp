@@ -16,8 +16,6 @@
 #
 # === Variables
 #
-# [*valid_levels*]
-#   A list of valid severity levels.
 #
 # [*_t*]
 #   An internal temp variable used for string parsing
@@ -33,20 +31,14 @@
 # Colin Moller <colin@unixarmy.com>
 #
 define rsyslog_to_vendor::rsyslog::logfile (
-  $logname  = undef,
-  $filepath = $title,
-  $severity = 'info'
+  String $logname    = undef,
+  Resource $filepath = $title,
+  Enum['emerg', 'alert', 'crit', 'error', 'warning', 'notice', 'info', 'debug'] $severity = 'info'
 ) {
-  $valid_levels = [
-    'emerg', 'alert', 'crit', 'error',
-    'warning', 'notice', 'info', 'debug',
-  ]
-
   validate_absolute_path($filepath)
-  validate_re($severity, $valid_levels, "severity value of ${severity} is not valid")
 
   $_t = split($filepath, '/')
-  $_logname = pick($logname,$_t[-1])
+  $_logname = pick($logname, $_t[-1])
 
   validate_string($_logname)
 
