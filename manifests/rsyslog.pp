@@ -35,8 +35,8 @@
 # Colin Moller <colin@unixarmy.com>
 #
 class rsyslog_to_vendor::rsyslog (
-  String $loggly_customer_token,
-  String $new_relic_loggly_customer_token,
+  String $loggly_customer_token = undef,
+  String $new_relic_customer_token = undef,
   Resource $cert_path  = $rsyslog_to_vendor::_cert_path,
   Boolean $enable_tls = $rsyslog_to_vendor::enable_tls,
 ) inherits loggly {
@@ -45,7 +45,7 @@ class rsyslog_to_vendor::rsyslog (
   validate_absolute_path($cert_path)
   validate_bool($enable_tls)
 
-  if $enable_loggly == true {
+  if $loggly_customer_token {
     file { '/etc/rsyslog.d/22-loggly.conf':
       ensure  => 'file',
       owner   => 'root',
@@ -56,8 +56,8 @@ class rsyslog_to_vendor::rsyslog (
     }
   }
 
-  if $enable_new_relic == true {
-    file { '/etc/rsyslog.d/22-new-relic.conf':
+  if $new_relic_customer_token {
+    file { '/etc/rsyslog.d/23-new-relic.conf':
       ensure  => 'file',
       owner   => 'root',
       group   => 'root',
