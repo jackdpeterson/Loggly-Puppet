@@ -39,6 +39,9 @@ end
 
 Facter.add('syslog_version') do
   setcode do
+    syslog_version = nil
+    distid = Facter.value('osfamily')
+
     case Facter.value('syslog_daemon')
     when 'syslog-ng'
       Facter::Util::Resolution.exec("#{syslog_daemon} -V | head -n1 | awk '{ print $2 }'")
