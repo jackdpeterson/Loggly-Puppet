@@ -35,11 +35,11 @@
 # Colin Moller <colin@unixarmy.com>
 #
 class rsyslog_to_vendor::rsyslog (
-  String $loggly_customer_token = undef,
-  String $new_relic_customer_token = undef,
-  Resource $cert_path  = $rsyslog_to_vendor::_cert_path,
-  Boolean $enable_tls = $rsyslog_to_vendor::enable_tls,
-) inherits loggly {
+  String $loggly_customer_token    = $rsyslog_to_vendor::loggly_customer_token,
+  String $new_relic_customer_token = $rsyslog_to_vendor::new_relic_customer_token,
+  Resource $cert_path              = $rsyslog_to_vendor::_cert_path,
+  Boolean $enable_tls              = $rsyslog_to_vendor::enable_tls,
+) inherits rsyslog_to_vendor {
   validate_string($loggly_customer_token)
   validate_string($new_relic_customer_token)
   validate_absolute_path($cert_path)
@@ -87,7 +87,7 @@ class rsyslog_to_vendor::rsyslog (
   # 'refreshonly' parameter.
   exec { 'restart_rsyslogd':
     command     => 'service rsyslog restart',
-    path        => ['/usr/sbin', '/sbin', '/usr/bin/', '/bin',],
+    path        => ['/usr/sbin', '/sbin', '/usr/bin/', '/bin', ],
     refreshonly => true,
   }
 }
