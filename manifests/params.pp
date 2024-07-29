@@ -1,28 +1,21 @@
-# == Class: loggly::params
+# == Class: rsyslog_to_vendor::params
 #
-# Provides defaults for the Loggly base class.
+# Provides defaults for the rsyslog_to_vendor base class.
 #
-# Normally this class would not be called on its own, but by the loggly class.
+# Normally this class would not be called on its own, but by the rsyslog_to_vendor class.
 #
-# === Authors
-#
-# Colin Moller <colin@unixarmy.com>
-#
-
-class loggly::params {
+class rsyslog_to_vendor::params {
   case $facts['os']['name'] {
     'RedHat', 'Ubuntu', 'Fedora', 'CentOS', 'Debian': {
-      # base directory for loggly support files
-      $base_dir = '/usr/local/loggly'
+      # base directory for rsyslog_to_vendor support files
+      $base_dir = '/usr/local/rsyslog_to_vendor'
 
       # TLS support is enabled by default to prevent sniffing of logs
       $enable_tls = true
     }
 
     default: {
-      fail("$facts['os']['name'] not supported")
+      fail("${facts['os']['name']} not supported")
     }
   }
 }
-
-# vim: syntax=puppet ft=puppet ts=2 sw=2 nowrap et

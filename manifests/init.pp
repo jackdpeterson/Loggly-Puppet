@@ -1,15 +1,13 @@
-# == Class: loggly
 #
-# Base class for Loggly integration.  This module sets up the required
-# infrastructure for Loggly integration to function, such as support
-# directories and TLS certificates.
+# This module sets up the required
+# infrastructure for rsyslog to emit logs to vendors (Loggly, New Relic)
 #
 # Normally this class would not be called directly, but by one of the
-# sub-modules that implements specific log sources such as loggly::rsyslog.
+# sub-modules that implements specific log sources such as rsyslog_to_vendor::rsyslog.
 #
 # === Parameters
 #
-# Defaults for these parameters are inherited from the loggly::params class.
+# Defaults for these parameters are inherited from the rsyslog_to_vendor::params class.
 #
 # [*base_dir*]
 #   Base directory to store Loggly support files in.
@@ -18,27 +16,26 @@
 #   Enables or disables TLS encryption for shipped log events.
 #
 # [*cert_path*]
-#   Directory to store the Loggly TLS certs in.  Normally this would be 
+#   Directory to store the Loggly TLS certs in.  Normally this would be
 #   relative to $base_dir.
 #
 # === Authors
 #
 # Colin Moller <colin@unixarmy.com>
+# Jack Peterson <>
 #
-
-class loggly (
-  $base_dir   = $loggly::params::base_dir,
-  $enable_tls = $loggly::params::enable_tls,
-  $cert_path  = undef,
-) inherits loggly::params {
-
+class rsyslog_to_vendor (
+  Resource $base_dir   = $rsyslog_to_vendor::params::base_dir,
+  Boolean $enable_tls = $rsyslog_to_vendor::params::enable_tls,
+  Resource $cert_path  = undef,
+) inherits rsyslog_to_vendor::params {
   $_cert_path = pick($cert_path, "${base_dir}/certs")
 
   validate_absolute_path($base_dir)
   validate_absolute_path($_cert_path)
   validate_bool($enable_tls)
 
-  # create directory for loggly support files
+  # create directory for rsyslog_to_vendor support files
   file { $base_dir:
     ensure => 'directory',
     owner  => 'root',

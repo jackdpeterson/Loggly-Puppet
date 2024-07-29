@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'loggly::rsyslog::logfile', :type => :define do
+describe 'rsyslog_to_vendor::rsyslog::logfile', :type => :define do
   context 'should require absolute path for $filepath' do
     let :title do
       'relative/path.log'

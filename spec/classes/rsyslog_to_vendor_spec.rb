@@ -9,19 +9,19 @@ describe 'loggly' do
           facts
         end
 
-        context "loggly class without any parameters" do
+        context "rsyslog_to_vendor class without any parameters" do
           let(:params) {{ }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to contain_class('loggly') }
+          it { is_expected.to contain_class('rsyslog_to_vendor') }
 
-#          it { is_expected.to contain_class('loggly::params') }
-#          it { is_expected.to contain_class('loggly::install').that_comes_before('loggly::config') }
-#          it { is_expected.to contain_class('loggly::config') }
-#          it { is_expected.to contain_class('loggly::service').that_subscribes_to('loggly::config') }
+#          it { is_expected.to contain_class('rsyslog_to_vendor::params') }
+#          it { is_expected.to contain_class('rsyslog_to_vendor::install').that_comes_before('rsyslog_to_vendor::config') }
+#          it { is_expected.to contain_class('rsyslog_to_vendor::config') }
+#          it { is_expected.to contain_class('rsyslog_to_vendor::service').that_subscribes_to('rsyslog_to_vendor::config') }
 
           it { 
-            is_expected.to contain_file('/usr/local/loggly').with(
+            is_expected.to contain_file('/usr/local/rsyslog_to_vendor').with(
               'ensure'  => 'directory', 
               'owner'   => 'root',
               'group'   => 'root',
@@ -30,7 +30,7 @@ describe 'loggly' do
           }
 
           it { 
-            is_expected.to contain_file('/usr/local/loggly/certs').with(
+            is_expected.to contain_file('/usr/local/rsyslog_to_vendor/certs').with(
               'ensure'  => 'directory',
               'owner'   => 'root',
               'group'   => 'root',
@@ -39,17 +39,17 @@ describe 'loggly' do
           }
 
           it { 
-            is_expected.to contain_file('/usr/local/loggly/certs/loggly_full.crt').with(
+            is_expected.to contain_file('/usr/local/rsyslog_to_vendor/certs/loggly_full.crt').with(
               'ensure'  => 'file',
               'owner'   => 'root',
               'group'   => 'root',
               'mode'    => '0644',
-              'source'  => 'puppet:///modules/loggly/loggly_full.crt'
+              'source'  => 'puppet:///modules/rsyslog_to_vendor/loggly_full.crt'
             ) 
           }
         end
 
-        context "loggly class with custom base_dir" do
+        context "rsyslog_to_vendor class with custom base_dir" do
           let(:params) {{ 
             :base_dir  => '/tmp/base_dir'
           }}
@@ -80,7 +80,7 @@ describe 'loggly' do
               'owner'   => 'root',
               'group'   => 'root',
               'mode'    => '0644',
-              'source'  => 'puppet:///modules/loggly/loggly_full.crt'
+              'source'  => 'puppet:///modules/rsyslog_to_vendor/loggly_full.crt'
             ) 
           }
         end
@@ -89,13 +89,13 @@ describe 'loggly' do
   end
 
   context 'unsupported operating system' do
-    describe 'loggly class without any parameters on Solaris/Nexenta' do
+    describe 'rsyslog_to_vendor class without any parameters on Solaris/Nexenta' do
       let(:facts) {{
         :osfamily        => 'Solaris',
         :operatingsystem => 'Nexenta',
       }}
 
-      it { expect { is_expected.to contain_package('loggly') }.to raise_error(Puppet::Error, /Nexenta not supported/) }
+      it { expect { is_expected.to contain_package('rsyslog_to_vendor') }.to raise_error(Puppet::Error, /Nexenta not supported/) }
     end
   end
 end

@@ -1,10 +1,10 @@
-# == Class: loggly::rsyslog
+# == Class: rsyslog_to_vendor::rsyslog
 #
 # Configures the rsyslog daemon to submit syslog events to Loggly.
 #
 # === Parameters
 #
-# [*customer_token*]
+# [*loggly_customer_token*]
 #   Customer Token that will be used to identify which Loggly account events
 #   will be submitted to.
 #
@@ -26,32 +26,45 @@
 #
 # === Examples
 #
-#  class { 'loggly::rsyslog':
-#    customer_token => '00000000-0000-0000-0000-000000000000',
+#  class { 'rsyslog_to_vendor::rsyslog':
+#    loggly_customer_token => '00000000-0000-0000-0000-000000000000',
 #  }
 #
 # === Authors
 #
 # Colin Moller <colin@unixarmy.com>
 #
-class loggly::rsyslog (
-  $customer_token,
-  $cert_path       = $loggly::_cert_path,
-  $enable_tls      = $loggly::enable_tls,
+class rsyslog_to_vendor::rsyslog (
+  String $loggly_customer_token,
+  String $new_relic_loggly_customer_token,
+  Resource $cert_path  = $rsyslog_to_vendor::_cert_path,
+  Boolean $enable_tls = $rsyslog_to_vendor::enable_tls,
 ) inherits loggly {
-
-  validate_string($customer_token)
+  validate_string($loggly_customer_token)
+  validate_string($new_relic_customer_token)
   validate_absolute_path($cert_path)
   validate_bool($enable_tls)
 
-  # Emit a configuration snippet that submits events to Loggly by default
-  file { '/etc/rsyslog.d/22-loggly.conf':
-    ensure  => 'file',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template("${module_name}/rsyslog/22-loggly.conf.erb"),
-    notify  => Exec['restart_rsyslogd'],
+  if $enable_loggly == true {
+    file { '/etc/rsyslog.d/22-loggly.conf':
+      ensure  => 'file',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template("${module_name}/rsyslog/22-loggly.conf.erb"),
+      notify  => Exec['restart_rsyslogd'],
+    }
+  }
+
+  if $enable_new_relic == true {
+    file { '/etc/rsyslog.d/22-new-relic.conf':
+      ensure  => 'file',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template("${module_name}/rsyslog/22-new-relic.conf.erb"),
+      notify  => Exec['restart_rsyslogd'],
+    }
   }
 
   # TLS configuration requires an extra package to be installed
@@ -74,7 +87,7 @@ class loggly::rsyslog (
   # 'refreshonly' parameter.
   exec { 'restart_rsyslogd':
     command     => 'service rsyslog restart',
-    path        => [ '/usr/sbin', '/sbin', '/usr/bin/', '/bin', ],
+    path        => ['/usr/sbin', '/sbin', '/usr/bin/', '/bin',],
     refreshonly => true,
   }
 }

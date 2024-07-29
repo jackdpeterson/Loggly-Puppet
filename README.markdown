@@ -113,8 +113,8 @@ For example:
 ```puppet
 node 'my_server_node.example.net' {
     # Send syslog events to Loggly
-    class { 'loggly::rsyslog':
-        customer_token => 'de7b5ccd-04de-4dc4-fbc9-501393600000',
+    class { 'rsyslog_to_vendor::rsyslog':
+        loggly_customer_token => 'de7b5ccd-04de-4dc4-fbc9-501393600000',
     }
 }
 ```
@@ -129,12 +129,12 @@ node 'my_server_node.example.net' {
     # Install the syslog-ng package before configuring Loggly
     package { 'syslog-ng':
         ensure => installed,
-        before => Class['loggly::syslog_ng'],
+        before => Class['rsyslog_to_vendor::syslog_ng'],
     }
 
     # Send syslog events to Loggly
-    class { 'loggly::syslog_ng':
-        customer_token => 'de7b5ccd-04de-4dc4-fbc9-501393600000',
+    class { 'rsyslog_to_vendor::syslog_ng':
+        loggly_customer_token => 'de7b5ccd-04de-4dc4-fbc9-501393600000',
     }
 }
 ```
@@ -153,8 +153,8 @@ For example:
 ```puppet
 node 'my_server_node.example.net' {
     # Send syslog events to Loggly
-    class { 'loggly::rsyslog':
-        customer_token => 'de7b5ccd-04de-4dc4-fbc9-501393600000',
+    class { 'rsyslog_to_vendor::rsyslog':
+        loggly_customer_token => 'de7b5ccd-04de-4dc4-fbc9-501393600000',
     }
 }
 ```
@@ -171,12 +171,12 @@ node 'my_server_node.example.net' {
     # Install the syslog-ng package before configuring Loggly
     package { 'syslog-ng':
         ensure => installed,
-        before => Class['loggly::syslog_ng'],
+        before => Class['rsyslog_to_vendor::syslog_ng'],
     }
 
     # Send syslog events to Loggly
-    class { 'loggly::syslog_ng':
-        customer_token => 'de7b5ccd-04de-4dc4-fbc9-501393600000',
+    class { 'rsyslog_to_vendor::syslog_ng':
+        loggly_customer_token => 'de7b5ccd-04de-4dc4-fbc9-501393600000',
     }
 }
 ```
@@ -189,16 +189,16 @@ disabled by default on Red Hat-style distributions.  Data sent from your systems
 ```puppet
 
 node 'my_server_node.example.net' {
-    class { 'loggly::rsyslog':
-        customer_token => 'de7b5ccd-04de-4dc4-fbc9-501393600000',
+    class { 'rsyslog_to_vendor::rsyslog':
+        loggly_customer_token => 'de7b5ccd-04de-4dc4-fbc9-501393600000',
     }
 
-    loggly::rsyslog::logfile { "custom-logfile":
+    rsyslog_to_vendor::rsyslog::logfile { "custom-logfile":
         logname  => "custom-logfile",
         filepath => "/var/log/custom-logfile.log"
     }
 
-    loggly::rsyslog::logfile { "mysql":
+    rsyslog_to_vendor::rsyslog::logfile { "mysql":
         logname  => "mysql",
         filepath => "/var/log/mysqld.log"
     }

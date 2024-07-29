@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'loggly::rsyslog' do
+describe 'rsyslog_to_vendor::rsyslog' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
@@ -8,42 +8,42 @@ describe 'loggly::rsyslog' do
           facts
         end
 
-        context "loggly::rsyslog class without any parameters" do
+        context "rsyslog_to_vendor::rsyslog class without any parameters" do
           let(:params) {{ }}
 
           it { should_not compile }
         end
         
-        context "loggly::rsyslog class with invalid customer_token" do
+        context "rsyslog_to_vendor::rsyslog class with invalid loggly_customer_token" do
           let(:params) {{
-            :customer_token => [ 'thing1', 'thing2' ],
+            :loggly_customer_token => [ 'thing1', 'thing2' ],
           }}
           it { should_not compile }
         end
 
-        context "loggly::rsyslog class with invalid cert_path" do
+        context "rsyslog_to_vendor::rsyslog class with invalid cert_path" do
           let(:params) {{
-            :customer_token => '0000-0000-0000',
+            :loggly_customer_token => '0000-0000-0000',
             :cert_path      => 'relative/path',
           }}
           it { should_not compile }
         end
 
-        context "loggly::rsyslog class with invalid enable_tls" do
+        context "rsyslog_to_vendor::rsyslog class with invalid enable_tls" do
           let(:params) {{
-            :customer_token => '0000-0000-0000',
+            :loggly_customer_token => '0000-0000-0000',
             :enable_tls     => 'yes',
           }}
           it { should_not compile }
         end
 
-        context "loggly::rsyslog class with customer_token" do
+        context "rsyslog_to_vendor::rsyslog class with loggly_customer_token" do
           let(:params) {{
-            :customer_token => '0000-0000-0000',
+            :loggly_customer_token => '0000-0000-0000',
           }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to contain_class('loggly::rsyslog') }
+          it { is_expected.to contain_class('rsyslog_to_vendor::rsyslog') }
 
           it {
             is_expected.to contain_exec('restart_rsyslogd').with(
@@ -53,10 +53,10 @@ describe 'loggly::rsyslog' do
           }
         end
 
-        context "loggly::rsyslog class with enable_tls" do
+        context "rsyslog_to_vendor::rsyslog class with enable_tls" do
           context "true" do
             let(:params) {{
-              :customer_token => '0000-0000-0000',
+              :loggly_customer_token => '0000-0000-0000',
               :enable_tls     => true,
             }}
          
@@ -75,7 +75,7 @@ describe 'loggly::rsyslog' do
 
           context "false" do
             let(:params) {{
-              :customer_token => '0000-0000-0000',
+              :loggly_customer_token => '0000-0000-0000',
               :enable_tls     => false,
             }}
          

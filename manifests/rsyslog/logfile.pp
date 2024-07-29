@@ -1,4 +1,4 @@
-# == Define: loggly::rsyslog::logfile
+# == Define: rsyslog_to_vendor::rsyslog::logfile
 #
 # Adds the monitoring of a file.
 #
@@ -24,7 +24,7 @@
 #
 # === Examples
 #
-#  loggly::rsyslog::logfile { '/opt/customapp/log':
+#  rsyslog_to_vendor::rsyslog::logfile { '/opt/customapp/log':
 #    logname => 'MY_App',
 #  }
 #
@@ -32,12 +32,11 @@
 #
 # Colin Moller <colin@unixarmy.com>
 #
-define loggly::rsyslog::logfile (
+define rsyslog_to_vendor::rsyslog::logfile (
   $logname  = undef,
   $filepath = $title,
   $severity = 'info'
 ) {
-
   $valid_levels = [
     'emerg', 'alert', 'crit', 'error',
     'warning', 'notice', 'info', 'debug',

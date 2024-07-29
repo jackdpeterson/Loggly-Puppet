@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'loggly::params' do #, :type => :class do
+describe 'rsyslog_to_vendor::params' do #, :type => :class do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
@@ -8,7 +8,7 @@ describe 'loggly::params' do #, :type => :class do
           facts
         end
 
-        it { is_expected.to contain_class("loggly::params") }
+        it { is_expected.to contain_class("rsyslog_to_vendor::params") }
       end
     end
   end
