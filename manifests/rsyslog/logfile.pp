@@ -32,7 +32,7 @@
 #
 define rsyslog_to_vendor::rsyslog::logfile (
   String $logname    = undef,
-  Resource $filepath = $title,
+  String $filepath = $title,
   Enum['emerg', 'alert', 'crit', 'error', 'warning', 'notice', 'info', 'debug'] $severity = 'info'
 ) {
   validate_absolute_path($filepath)
