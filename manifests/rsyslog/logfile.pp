@@ -38,8 +38,6 @@ define rsyslog_to_vendor::rsyslog::logfile (
   $_t = split($filepath, '/')
   $_logname = pick($logname, $_t[-1])
 
-  validate_string($_logname)
-
   # This template uses $logname and $filepath
   file { "/etc/rsyslog.d/${_logname}.conf":
     content => template("${module_name}/log.conf.erb"),
