@@ -6,7 +6,7 @@
 
 Facter.add('syslog_daemon') do
   setcode do
-    case Facter.value('osfamily')
+    case Facter.value('os.name')
     when %r{RedHat}
       syslog_ng_installed = Facter::Util::Resolution.exec('/bin/rpm -q syslog-ng 2>/dev/null | /bin/grep -c ^syslog-ng')
       if syslog_ng_installed != '0'
@@ -31,6 +31,18 @@ Facter.add('syslog_daemon') do
           nil
         end
       end
+    when %r{Ubuntu}
+      syslog_ng_installed = Facter::Util::Resolution.exec('/usr/bin/dpkg-query -W -f \'${status}\' syslog-ng 2>/dev/null | /bin/grep -c ^install')
+      if syslog_ng_installed != '0'
+        'syslog-ng'
+      else
+        rsyslog_installed = Facter::Util::Resolution.exec('/usr/bin/dpkg-query -W -f \'${status}\' rsyslog 2>/dev/null | /bin/grep -c ^install')
+        if rsyslog_installed != '0'
+          'rsyslogd'
+        else
+          nil
+        end
+      end
     else
       nil
     end
@@ -40,7 +52,7 @@ end
 Facter.add('syslog_version') do
   setcode do
     syslog_version = nil
-    distid = Facter.value('osfamily')
+    distid = Facter.value('os.name')
 
     case Facter.value('syslog_daemon')
     when 'syslog-ng'
