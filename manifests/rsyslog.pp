@@ -40,6 +40,11 @@ class rsyslog_to_vendor::rsyslog (
   Optional[Stdlib::Absolutepath] $cert_path = $rsyslog_to_vendor::_cert_path,
   Boolean $enable_tls                       = $rsyslog_to_vendor::enable_tls,
 ) inherits rsyslog_to_vendor {
+  exec { 'restart_rsyslogd':
+    command     => 'service rsyslog restart',
+    path        => ['/usr/sbin', '/sbin', '/usr/bin/', '/bin', ],
+    refreshonly => true,
+  }
 
   if $loggly_customer_token {
     file { '/etc/rsyslog.d/22-loggly.conf':
@@ -81,11 +86,7 @@ class rsyslog_to_vendor::rsyslog (
   #
   # Note that this will only be called on configuration changes due to the
   # 'refreshonly' parameter.
-  exec { 'restart_rsyslogd':
-    command     => 'service rsyslog restart',
-    path        => ['/usr/sbin', '/sbin', '/usr/bin/', '/bin', ],
-    refreshonly => true,
-  }
+
 }
 
 # vim: syntax=puppet ft=puppet ts=2 sw=2 nowrap et
