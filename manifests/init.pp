@@ -12,27 +12,11 @@
 # [*base_dir*]
 #   Base directory to store Loggly support files in.
 #
-# [*enable_tls*]
-#   Enables or disables TLS encryption for shipped log events.
-#
-# [*cert_path*]
-#   Directory to store the Loggly TLS certs in.  Normally this would be
-#   relative to $base_dir.
-#
-# === Authors
-#
-# Colin Moller <colin@unixarmy.com>
-# Jack Peterson <>
-#
 class rsyslog_to_vendor (
-  Stdlib::Absolutepath $base_dir                        = $rsyslog_to_vendor::params::base_dir,
-  Boolean $enable_tls              = $rsyslog_to_vendor::params::enable_tls,
+  Stdlib::Absolutepath $base_dir   = $rsyslog_to_vendor::params::base_dir,
   String $loggly_customer_token    = undef,
   String $new_relic_customer_token = undef,
-  Optional[Stdlib::Absolutepath] $cert_path                       = undef,
 ) inherits rsyslog_to_vendor::params {
-  $_cert_path = pick($cert_path, "${base_dir}/certs")
-
   # create directory for rsyslog_to_vendor support files
   file { $base_dir:
     ensure => 'directory',
@@ -42,7 +26,7 @@ class rsyslog_to_vendor (
   }
 
   # create directory for TLS certificates
-  file { $_cert_path:
+  file { "${base_dir}/certs":
     ensure  => 'directory',
     owner   => 'root',
     group   => 'root',
@@ -51,13 +35,13 @@ class rsyslog_to_vendor (
   }
 
   # store the Loggly TLS cert inside $cert_path
-  file { "${_cert_path}/loggly_full.crt":
+  file { "${base_dir}/certs/loggly_full.crt":
     ensure  => 'file',
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
     source  => "puppet:///modules/${module_name}/loggly_full.crt",
-    require => File[$_cert_path],
+    require => File["${base_dir}/certs"],
   }
 }
 

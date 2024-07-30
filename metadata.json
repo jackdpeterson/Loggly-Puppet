@@ -24,7 +24,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">=3.0.0 <8.1.0"
+      "version_requirement": ">=8.0.0 <8.1.0"
     }
   ],
   "description": "Configures various data sources for automatic submission to Loggly and/or New Relic",

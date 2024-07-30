@@ -12,17 +12,16 @@
 #   found in the Loggly documentation at:
 #     http://www.loggly.com/docs/customer-token-authentication-token/
 #
+# [*new_relic_customer_token*]
+#   Customer Token that will be used to identify which New Relic account events
+#   will be submitted to.
+#   More informaiton on how to generate and obtain the token can be found at New Relic's documentation at:
+#      https://docs.newrelic.com/docs/logs/log-api/introduction-log-api/
+#
 # === Variables
 #
 # This module uses configuration from the base Loggly class to set
 # the certificate path and TLS status.
-#
-# [*cert_dir*]
-#   The directory to find the Loggly TLS certs in, as set by the base loggly
-#   class.
-#
-# [*enable_tls*]
-#   Enables or disables TLS encryption for shipped events.
 #
 # === Examples
 #
@@ -30,19 +29,13 @@
 #    loggly_customer_token => '00000000-0000-0000-0000-000000000000',
 #  }
 #
-# === Authors
-#
-# Colin Moller <colin@unixarmy.com>
-#
 class rsyslog_to_vendor::rsyslog (
-  String $loggly_customer_token             = $rsyslog_to_vendor::loggly_customer_token,
-  String $new_relic_customer_token          = $rsyslog_to_vendor::new_relic_customer_token,
-  Optional[Stdlib::Absolutepath] $cert_path = $rsyslog_to_vendor::_cert_path,
-  Boolean $enable_tls                       = $rsyslog_to_vendor::enable_tls,
+  String $loggly_customer_token    = $rsyslog_to_vendor::loggly_customer_token,
+  String $new_relic_customer_token = $rsyslog_to_vendor::new_relic_customer_token,
 ) inherits rsyslog_to_vendor {
   exec { 'restart_rsyslogd':
     command     => 'service rsyslog restart',
-    path        => ['/usr/sbin', '/sbin', '/usr/bin/', '/bin', ],
+    path        => ['/usr/sbin', '/sbin', '/usr/bin/', '/bin'],
     refreshonly => true,
   }
 
@@ -54,6 +47,7 @@ class rsyslog_to_vendor::rsyslog (
       mode    => '0644',
       content => template("${module_name}/rsyslog/22-loggly.conf.erb"),
       notify  => Exec['restart_rsyslogd'],
+      require => [Package['rsyslog-gnutls']]
     }
   }
 
@@ -65,28 +59,14 @@ class rsyslog_to_vendor::rsyslog (
       mode    => '0644',
       content => template("${module_name}/rsyslog/22-new-relic.conf.erb"),
       notify  => Exec['restart_rsyslogd'],
+      require => [Package['rsyslog-gnutls']]
     }
   }
 
   # TLS configuration requires an extra package to be installed
-  if $enable_tls == true {
-    package { 'rsyslog-gnutls':
-      ensure => 'installed',
-      notify => Exec['restart_rsyslogd'],
-    }
 
-    # Add a dependency on the rsyslog-gnutls package to the configuration
-    # snippet so that it will be installed before we generate any config
-    Class['loggly'] -> File['/etc/rsyslog.d/22-loggly.conf'] -> Package['rsyslog-gnutls']
+  package { 'rsyslog-gnutls':
+    ensure => 'installed',
+    notify => Exec['restart_rsyslogd'],
   }
-
-  # Call an exec to restart the syslog service instead of using a puppet
-  # managed service to avoid external dependencies or conflicts with modules
-  # that may already manage the syslog daemon.
-  #
-  # Note that this will only be called on configuration changes due to the
-  # 'refreshonly' parameter.
-
 }
-
-# vim: syntax=puppet ft=puppet ts=2 sw=2 nowrap et

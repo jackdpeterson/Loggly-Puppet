@@ -9,9 +9,6 @@ class rsyslog_to_vendor::params {
     'RedHat', 'Ubuntu', 'Fedora', 'CentOS', 'Debian': {
       # base directory for rsyslog_to_vendor support files
       $base_dir = '/usr/local/rsyslog_to_vendor'
-
-      # TLS support is enabled by default to prevent sniffing of logs
-      $enable_tls = true
     }
 
     default: {
