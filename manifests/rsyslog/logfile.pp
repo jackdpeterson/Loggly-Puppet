@@ -31,8 +31,8 @@
 # Colin Moller <colin@unixarmy.com>
 #
 define rsyslog_to_vendor::rsyslog::logfile (
-  String $logname    = undef,
-  Stdlib::Absolutepath $filepath = $title,
+  String $logname,
+  Stdlib::Absolutepath $filepath                                                          = $title,
   Enum['emerg', 'alert', 'crit', 'error', 'warning', 'notice', 'info', 'debug'] $severity = 'info'
 ) {
   $_t = split($filepath, '/')
@@ -44,5 +44,3 @@ define rsyslog_to_vendor::rsyslog::logfile (
     notify  => Exec['restart_rsyslogd'],
   }
 }
-
-# vi:syntax=puppet:filetype=puppet:ts=4:et:

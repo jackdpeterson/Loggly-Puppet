@@ -13,36 +13,21 @@
 #   Base directory to store Loggly support files in.
 #
 class rsyslog_to_vendor (
-  Stdlib::Absolutepath $base_dir   = $rsyslog_to_vendor::params::base_dir,
-  String $loggly_customer_token    = undef,
-  String $new_relic_customer_token = undef,
-) inherits rsyslog_to_vendor::params {
-  # create directory for rsyslog_to_vendor support files
-  file { $base_dir:
-    ensure => 'directory',
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
-  }
+  Optional[String]                    $loggly_customer_token,
+  Optional[String]                    $new_relic_customer_token,
+  Boolean                             $service_enable,
+  Enum['running', 'stopped']          $service_ensure,
+  Boolean                             $service_manage,
+  String                              $service_name,
+  Optional[String]                    $service_provider,
+  Boolean                             $service_hasstatus,
+  Boolean                             $service_hasrestart,
+) {
+  contain rsyslog_to_vendor::install
+  contain rsyslog_to_vendor::config
+  contain rsyslog_to_vendor::service
 
-  # create directory for TLS certificates
-  file { "${base_dir}/certs":
-    ensure  => 'directory',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    require => File[$base_dir],
-  }
-
-  # store the Loggly TLS cert inside $cert_path
-  file { "${base_dir}/certs/loggly_full.crt":
-    ensure  => 'file',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    source  => "puppet:///modules/${module_name}/loggly_full.crt",
-    require => File["${base_dir}/certs"],
-  }
+  Class[rsyslog_to_vendor::install]
+  -> Class[rsyslog_to_vendor::config]
+  -> Class[rsyslog_to_vendor::service]
 }
-
-# vim: syntax=puppet ft=puppet ts=2 sw=2 nowrap et
