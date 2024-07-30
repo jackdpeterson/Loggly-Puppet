@@ -32,11 +32,9 @@
 #
 define rsyslog_to_vendor::rsyslog::logfile (
   String $logname    = undef,
-  String $filepath = $title,
+  Stdlib::Absolutepath $filepath = $title,
   Enum['emerg', 'alert', 'crit', 'error', 'warning', 'notice', 'info', 'debug'] $severity = 'info'
 ) {
-  validate_absolute_path($filepath)
-
   $_t = split($filepath, '/')
   $_logname = pick($logname, $_t[-1])
 
