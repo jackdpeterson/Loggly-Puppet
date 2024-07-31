@@ -5,7 +5,7 @@ class rsyslog_to_vendor::install {
 
   package { 'rsyslog-gnutls':
     ensure  => 'installed',
-    require => Package['rsyslog'],
+    require => Package['rsyslogd'],
     notify  => Exec['restart_rsyslogd'],
   }
 }
