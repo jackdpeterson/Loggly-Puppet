@@ -1,6 +1,6 @@
 class rsyslog_to_vendor::config (
-  String $loggly_customer_token    = undef,
-  String $new_relic_customer_token = undef,
+  String $loggly_customer_token    = $rsyslog_to_vendor::loggly_customer_token,
+  String $new_relic_customer_token = $rsyslog_to_vendor::new_relic_customer_token,
 ) {
   $base_dir = '/usr/local/rsyslog_to_vendor'
   # create directory for rsyslog_to_vendor support files
@@ -30,7 +30,7 @@ class rsyslog_to_vendor::config (
     require => File["${base_dir}/certs"],
   }
 
-  if $rsyslog_to_vendor::loggly_customer_token {
+  if $loggly_customer_token {
     file { '/etc/rsyslog.d/22-loggly.conf':
       ensure  => 'file',
       owner   => 'root',
@@ -42,7 +42,7 @@ class rsyslog_to_vendor::config (
     }
   }
 
-  if $rsyslog_to_vendor::new_relic_customer_token {
+  if $new_relic_customer_token {
     file { '/etc/rsyslog.d/23-new-relic.conf':
       ensure  => 'file',
       owner   => 'root',
