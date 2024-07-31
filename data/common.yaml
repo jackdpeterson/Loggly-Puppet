@@ -1,1 +1,8 @@
---- {}
+---
+rsyslog_to_vendor::service_enable: true
+rsyslog_to_vendor::service_ensure: running
+rsyslog_to_vendor::service_manage: true
+rsyslog_to_vendor::service_name: rsyslog
+rsyslog_to_vendor::service_provider: ~
+rsyslog_to_vendor::service_hasstatus: true
+rsyslog_to_vendor::service_hasrestart: true
