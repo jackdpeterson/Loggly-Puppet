@@ -48,7 +48,7 @@ class rsyslog_to_vendor::config (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => template("${module_name}/rsyslog/22-new-relic.conf.erb"),
+      content => template("${module_name}/rsyslog/23-new-relic.conf.erb"),
       notify  => Exec['restart_rsyslogd'],
       require => [Package['rsyslog-gnutls']]
     }

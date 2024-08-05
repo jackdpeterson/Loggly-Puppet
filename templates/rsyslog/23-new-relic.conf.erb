@@ -1,4 +1,3 @@
-<% if @enable_tls -%>
 # Define New Relic syslog format
 
 $template NRLogFormat,"<%= @new_relic_customer_token -%> &lt;%pri%&gt;%protocol-version% %timestamp:::date-rfc3339% %hostname% %app-name% %procid% %msgid% %structured-data% %msg%\n"
@@ -13,5 +12,3 @@ $ActionSendStreamDriverAuthMode x509/name
 $ActionSendStreamDriverPermittedPeer *.syslog.nr-data.net
 
 *.* @@newrelic.syslog.nr-data.net:6514;NRLogFormat
-
-<% end %>

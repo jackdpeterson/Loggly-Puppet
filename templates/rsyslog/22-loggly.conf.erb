@@ -1,5 +1,3 @@
-<% if @enable_tls -%>
-
 ##########################################################
 ### TLS RsyslogTemplate for Loggly
 ##########################################################
@@ -15,15 +13,3 @@ $ActionSendStreamDriverAuthMode x509/name
 $ActionSendStreamDriverPermittedPeer *.loggly.com
 
 *.* @@logs-01.loggly.com:6514;LogglyFormat
-
-<% else -%>
-
-##########################################################
-### TLS RsyslogTemplate for Loggly
-##########################################################
-
-$template LogglyFormat,"<%%pri%>%protocol-version% %timestamp:::date-rfc3339% %HOSTNAME% %app-name% %procid% %msgid% [<%= @loggly_customer_token -%>@41058] %msg%\n"
-
-*.* @@logs-01.loggly.com:514; LogglyFormat
-<% end -%>
-#################END CONFIG FILE#########################
