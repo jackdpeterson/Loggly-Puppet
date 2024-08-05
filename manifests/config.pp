@@ -1,6 +1,6 @@
 class rsyslog_to_vendor::config (
-  String $loggly_customer_token    = $rsyslog_to_vendor::loggly_customer_token,
-  String $new_relic_customer_token = $rsyslog_to_vendor::new_relic_customer_token,
+  Optional[String] $loggly_customer_token    = $rsyslog_to_vendor::loggly_customer_token,
+  Optional[String] $new_relic_customer_token = $rsyslog_to_vendor::new_relic_customer_token,
 ) {
   $base_dir = '/usr/local/rsyslog_to_vendor'
   # create directory for rsyslog_to_vendor support files

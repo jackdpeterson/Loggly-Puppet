@@ -13,8 +13,8 @@
 #   Base directory to store Loggly support files in.
 #
 class rsyslog_to_vendor (
-  Optional[String]                    $loggly_customer_token,
-  Optional[String]                    $new_relic_customer_token,
+  Optional[String]                    $loggly_customer_token = undef,
+  Optional[String]                    $new_relic_customer_token = undef,
   Boolean                             $service_enable,
   Enum['running', 'stopped']          $service_ensure,
   Boolean                             $service_manage,
