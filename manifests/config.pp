@@ -3,6 +3,7 @@ class rsyslog_to_vendor::config (
   Optional[String] $new_relic_customer_token = $rsyslog_to_vendor::new_relic_customer_token,
 ) {
   $base_dir = '/usr/local/rsyslog_to_vendor'
+  $cert_path = '/etc/ssl/certs'
   # create directory for rsyslog_to_vendor support files
   file { $base_dir:
     ensure => 'directory',
